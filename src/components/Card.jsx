@@ -1,19 +1,19 @@
-import React from 'react';
+import React from "react";
 
-function Card(props) {
+function Card({ weatherData }) {
   return (
-    <div className='card'>
+    <div className="card">
       <h4>
-        {props.cityName}, {props.countryName}
+        {weatherData.name}, {weatherData.sys.country}
       </h4>
-      <div className='weather'>
-        <h5>{props.weatherMain}</h5>
-        <p>{props.weatherDesc}</p>
+      <div className="weather">
+        <h5>{weatherData.weather[0].main}</h5>
+        <p>{weatherData.weather[0].description}</p>
       </div>
-      <p> min temp: {props.maxTemp} </p>
-      <p> max temp: {props.minTemp} </p>
+      <p className="temp"> min temp: {weatherData.main.temp_max}°C</p>
+      <p className="temp"> max temp: {weatherData.main.temp_min}°C</p>
       <p>
-        location: {props.longitutde} , {props.latitude}
+        location: {weatherData.coord.lon} , {weatherData.coord.lat}
       </p>
     </div>
   );
