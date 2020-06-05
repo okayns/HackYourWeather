@@ -11,7 +11,8 @@ function Main() {
     desc: null,
   });
   const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState({});
+
+  const [weatherData, setweatherData] = useState([]);
 
   const getData = () => {
     setLoading(true);
@@ -22,7 +23,7 @@ function Main() {
         if (resp.ok) {
           return resp.json();
         } else {
-          setError((prevValue) => {
+          setError(() => {
             return {
               value: true,
               desc: resp.statusText,
@@ -33,9 +34,13 @@ function Main() {
       })
       .then((result) => {
         if (result.id) {
-          setWeatherData(result);
+          const filteredCities = weatherData.filter(
+            // To deal with duplication city value...
+            (city) => city.id !== result.id
+          );
+          setweatherData([result, ...filteredCities]);
         } else {
-          setError((prevValue) => {
+          setError(() => {
             return {
               value: true,
               desc: result.message,
@@ -44,7 +49,7 @@ function Main() {
         }
       })
       .catch((err) => {
-        setError((prevValue) => {
+        setError(() => {
           return {
             value: true,
             desc: err.message,
@@ -63,25 +68,34 @@ function Main() {
     setCity(event.target.value);
   };
 
+  const handleDelete = (id) => {
+    const newList = weatherData.filter((city) => city.id !== id);
+    setweatherData(newList);
+  };
+
   return (
     <div>
+      <Form
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        city={city}
+      />
       {isLoading && <p>Data is fetching...</p>}
-      {!error.value ? (
-        <Form
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          city={city}
-        />
-      ) : (
+      {error.value && (
         <p style={{ fontSize: "1.4rem", marginTop: "2rem" }}>
-          Could not get data because of{" "}
+          Could not get data because of
           <em>
             {city} {error.desc}
           </em>
           <br /> Refresh the page and try again...(F5)
         </p>
       )}
-      {weatherData.id && <Card weatherData={weatherData} />}
+
+      {weatherData.map((city) => {
+        return (
+          <Card key={city.id} city={city} removeCity={handleDelete} />
+        );
+      })}
     </div>
   );
 }

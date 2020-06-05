@@ -24,6 +24,10 @@ body {
   color: white;
 }
 
+.MuiButton-startIcon {
+  margin-right: 0 !important;
+}
+
 .app-body {
   padding: 2rem 0;
   text-align: center;
@@ -34,8 +38,9 @@ body {
 }
 
 .card {
+  position: relative;
   border: 1px solid white;
-  width: 20rem;
+  width: 25rem;
   margin: auto;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -61,7 +66,7 @@ h5 {
   font-size: 1.4rem;
 }
 
-.temp{
+.temp {
   margin-bottom: 5px;
 }
 
@@ -91,3 +96,4 @@ input[type="submit"] {
   font-size: 18px;
   margin-left: 10px;
 }
+
