@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Form from "./Form";
 import Card from "./Card";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Forecast from "./Forecast";
 
 const api_key = process.env.REACT_APP_OPENWEATHERMAP_API_KEY;
 
@@ -39,6 +41,7 @@ function Main() {
             (city) => city.id !== result.id
           );
           setweatherData([result, ...filteredCities]);
+          setError(false);
         } else {
           setError(() => {
             return {
@@ -74,29 +77,34 @@ function Main() {
   };
 
   return (
-    <div>
-      <Form
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        city={city}
-      />
-      {isLoading && <p>Data is fetching...</p>}
-      {error.value && (
-        <p style={{ fontSize: "1.4rem", marginTop: "2rem" }}>
-          Could not get data because of
-          <em>
-            {city} {error.desc}
-          </em>
-          <br /> Refresh the page and try again...(F5)
-        </p>
-      )}
+    <Router>
+      <Route exact path="/">
+        <div>
+          <Form
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            city={city}
+          />
+          {isLoading && <p>Data is fetching...</p>}
+          {error.value && (
+            <p style={{ fontSize: "1.4rem", marginTop: "2rem" }}>
+              Could not get data because of
+              <em>
+                {city} {error.desc}
+              </em>
+              <br /> Refresh the page and try again...(F5)
+            </p>
+          )}
 
-      {weatherData.map((city) => {
-        return (
-          <Card key={city.id} city={city} removeCity={handleDelete} />
-        );
-      })}
-    </div>
+          {weatherData.map((city) => {
+            return <Card key={city.id} city={city} removeCity={handleDelete} />;
+          })}
+        </div>
+      </Route>
+      <Route path="/:cityID">
+        <Forecast />
+      </Route>
+    </Router>
   );
 }
 

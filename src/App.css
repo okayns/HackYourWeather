@@ -97,3 +97,6 @@ input[type="submit"] {
   margin-left: 10px;
 }
 
+.recharts-wrapper {
+  margin: 0 auto;
+}
